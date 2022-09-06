@@ -55,6 +55,20 @@ cd subxt-tests
 END_POINT=$WS_ENDPOINT_DEV_NET cargo test -- --test-threads=1
 ```
 
+For example, to run it against a local devnet you can try:
+
+```bash
+docker run -it --rm -p 9944:9944  us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:dev --dev --unsafe-ws-external
+END_POINT="ws:127.0.0.1:9944" cargo test -- --test-threads=1
+```
+
+For example, to run it against a live devnet you can try:
+
+```bash
+docker run -it --rm -p 9944:9944  us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:dev --dev --unsafe-ws-external
+END_POINT="wss://laguna-chain-dev.hydrogenx.tk:443" cargo test -- --test-threads=1
+```
+
 
 
 
