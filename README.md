@@ -10,7 +10,9 @@ laguna-chain uses pallet-contracts under the hood, which means you'll be able to
 
 You'll need to first obtain the solang compiler, which should be available for you if you can access laguna-chain's private docker registry:
 
-`docker run --rm -it us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata --help`
+```bash
+docker run --rm -it us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata --help
+```
 
 > this will be fixed once it's merged upstream, and eventually you can get the official binary and run:
 >
@@ -20,7 +22,9 @@ You'll need to first obtain the solang compiler, which should be available for y
 
 To compile a contract, use this command:
 
-`docker run --rm -it -v $(pwd)/$HOST_DIR:/$MOUNT_PATH_IN_CONTAINER us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata compile --target substrate $MOUNT_PATH_IN_CONTAINER/$CONTRACT_PATH.sol -o $MOUNT_PATH_IN_CONTAINER/$OUTPUT_PATH`
+```bash 
+docker run --rm -it -v $(pwd)/$HOST_DIR:/$MOUNT_PATH_IN_CONTAINER us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata compile --target substrate $MOUNT_PATH_IN_CONTAINER/$CONTRACT_PATH.sol -o $MOUNT_PATH_IN_CONTAINER/$OUTPUT_PATH
+```
 
 Afer this you'll recieve two file at your specified path:
 `$CONTRACT.contract`, and `$CONTRACT.wasm`, which the first one is the ABI bundle with the wasm code inside it. And a standalone wasm file.
@@ -46,7 +50,10 @@ Currently a subxt integration tests is maintained under this repo with the packa
 
 The test can be run at the subxt directory:
 
-`END_POINT=$WS_ENDPOINT_DEV_NET cargo test -- --test-threads=1`
+```bash
+cd subxt-tests
+END_POINT=$WS_ENDPOINT_DEV_NET cargo test -- --test-threads=1
+```
 
 
 
