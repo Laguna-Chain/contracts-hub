@@ -407,7 +407,10 @@ pub fn load_project(path: impl AsRef<Path>) -> anyhow::Result<InkProject> {
 pub async fn free_balance_of(api: &API, addr: AccountId32) -> anyhow::Result<u128> {
     // let key = node::storage().system().account(addr);
 
-    let key = node::storage().tokens().accounts(addr, CurrencyId::NativeToken(node::runtime_types::primitives::currency::TokenId::Laguna));
+    let key = node::storage().tokens().accounts(
+        addr,
+        CurrencyId::NativeToken(node::runtime_types::primitives::currency::TokenId::Laguna),
+    );
     let val = api.storage().fetch_or_default(&key, None).await?;
 
     Ok(val.free)
