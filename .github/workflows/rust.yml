@@ -25,5 +25,5 @@ jobs:
     - run: docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
     - run: docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
     - name: Run tests
-      run: cargo test --verbose -- --test-threads=1
+      run: cargo test -- --test-threads=1
       working-directory: subxt-tests
