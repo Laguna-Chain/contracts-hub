@@ -10,13 +10,20 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  integration-tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      working-directory: subxt-tests
-      run: cargo build --verbose
+    - name: Login to GAR
+      uses: docker/login-action@v2
+      with:
+        registry: us-docker.pkg.dev
+        username: _json_key
+        password: ${{ secrets.GOOGLE_CREDENTIALS }}
+    - name: start laguna-chain:devnet
+      run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:dev --dev --ws-external
+    - run: docker run --rm -it -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
+    - run: docker run --rm -it -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --verbose -- --test-threads=1
       working-directory: subxt-tests
