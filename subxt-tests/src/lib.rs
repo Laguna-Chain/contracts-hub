@@ -504,7 +504,7 @@ impl Contract {
             pallet_system_contract_deployer::pallet::Call as SystemContractDeployerCall,
         };
 
-        let payload = node::tx().sudo().sudo(RuntimeCall::SudoContracts(
+        let payload = node::tx().sudo().sudo(RuntimeCall::SystemContractDeployer(
             SystemContractDeployerCall::instantiate_with_code {
                 value,
                 gas_limit: GAS_LIMIT,
@@ -528,7 +528,7 @@ impl Contract {
             .iter()
             .find_map(|e| {
                 e.ok()
-                    .and_then(|i| i.as_event::<node::sudo_contracts::events::Created>().ok())
+                    .and_then(|i| i.as_event::<node::system_contract_deployer::events::Created>().ok())
                     .flatten()
                     .map(|i| i.0)
             })
