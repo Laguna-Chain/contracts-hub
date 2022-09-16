@@ -11,7 +11,7 @@ env:
 
 jobs:
   integration-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
     - name: Login to GAR
@@ -20,10 +20,17 @@ jobs:
         registry: us-docker.pkg.dev
         username: _json_key
         password: ${{ secrets.GOOGLE_CREDENTIALS }}
+    - name: Install rust-toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2022-08-15
+        target: wasm32-unknown-unknown
+        default: true
+        override: true
+        components: rust-src
     - name: Install cargo-contract
       run: |
-        rustup component add rust-src
-        apt-get install binaryen
+        sudo apt-get update && sudo apt-get -y install binaryen
         cargo install cargo-dylint dylint-link
         cargo install --force --locked cargo-contract
     - name: Build System contracts
@@ -31,7 +38,7 @@ jobs:
         for f in *; do
           if [ -d "$f" ]; then
             echo "building $f"
-            cargo +nightly contract build --release --manifest-path ./$f/Cargo.toml
+            cargo contract build --release --manifest-path ./$f/Cargo.toml
             cp ./$f/target/ink/$f.contract ../
           fi
         done
