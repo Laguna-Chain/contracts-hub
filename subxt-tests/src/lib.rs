@@ -488,6 +488,68 @@ impl Contract {
         Ok(deployed.events)
     }
 
+    pub async fn deploy_as_system_contract(
+        &mut self,
+        api: &API,
+        destined_address: Option<[u8; 32]>,
+        value: u128,
+        build_selector: impl Fn(ContractMessageTranscoder<'_>) -> Vec<u8>,
+    ) -> anyhow::Result<Vec<node::contracts::events::ContractEmitted>> {
+        let alice = PairSigner::new(AccountKeyring::Alice.pair());
+        let transcoder = ContractMessageTranscoder::new(&self.project);
+        let selector = build_selector(transcoder);
+
+        use node::runtime_types::{
+            laguna_runtime::Call as RuntimeCall,
+            pallet_system_contract_deployer::pallet::Call as SystemContractDeployerCall,
+        };
+
+        let payload = node::tx().sudo().sudo(RuntimeCall::SystemContractDeployer(
+            SystemContractDeployerCall::instantiate_with_code {
+                value,
+                gas_limit: GAS_LIMIT,
+                storage_deposit_limit: None,
+                code: self.blob.clone(),
+                data: selector,
+                destined_address,
+            },
+        ));
+
+        let runtime_events = api
+            .tx()
+            .sign_and_submit_then_watch_default(&payload, &alice)
+            .await?
+            .wait_for_in_block()
+            .await?
+            .fetch_events()
+            .await?;
+
+        let contract_address = runtime_events
+            .iter()
+            .find_map(|e| {
+                e.ok()
+                    .and_then(|i| i.as_event::<node::system_contract_deployer::events::Created>().ok())
+                    .flatten()
+                    .map(|i| i.0)
+            })
+            .ok_or_else(|| anyhow::anyhow!("unable to find deployed"))?;
+        self.address.replace(contract_address);
+
+        let contract_events = runtime_events
+            .iter()
+            .filter_map(|e| {
+                e.ok()
+                    .and_then(|v| {
+                        v.as_event::<node::contracts::events::ContractEmitted>()
+                            .ok()
+                    })
+                    .flatten()
+            })
+            .collect::<Vec<_>>();
+
+        Ok(contract_events)
+    }
+
     pub async fn call(
         &self,
         api: &API,

@@ -11,7 +11,7 @@ env:
 
 jobs:
   integration-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
     - name: Login to GAR
@@ -20,10 +20,35 @@ jobs:
         registry: us-docker.pkg.dev
         username: _json_key
         password: ${{ secrets.GOOGLE_CREDENTIALS }}
+    - name: Install rust-toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2022-08-15
+        target: wasm32-unknown-unknown
+        default: true
+        override: true
+        components: rust-src
+    - name: Install cargo-contract
+      run: |
+        sudo apt-get update && sudo apt-get -y install binaryen
+        cargo install cargo-dylint dylint-link
+        cargo install --force --locked cargo-contract
+    - name: Build System contracts
+      run: |
+        for f in *; do
+          if [ -d "$f" ]; then
+            echo "building $f"
+            cargo contract build --release --manifest-path ./$f/Cargo.toml
+            cp ./$f/target/ink/$f.contract ../
+          fi
+        done
+      working-directory: contracts/system-contracts
+    - name: Build Solidity files
+      run: |
+        docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
+        docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
     - name: start laguna-chain:devnet
-      run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:dev --dev --ws-external
-    - run: docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
-    - run: docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
+      run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.1 --dev --ws-external
     - name: Run tests
       run: cargo test -- --test-threads=1
       working-directory: subxt-tests

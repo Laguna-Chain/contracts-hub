@@ -12,6 +12,7 @@ mod external_call;
 mod flipper;
 mod issue666;
 mod msg_sender;
+mod native_token_wrapper;
 mod primitives;
 mod randomizer;
 mod store;
