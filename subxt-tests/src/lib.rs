@@ -421,6 +421,7 @@ struct Contract {
     project: InkProject,
     blob: Vec<u8>,
     address: Option<AccountId32>,
+    code_hash: contract_metadata::CodeHash,
 }
 
 impl Contract {
@@ -429,6 +430,7 @@ impl Contract {
 
         let contract: ContractMetadata = serde_json::from_reader(r)?;
         let project = load_versioned_metadata(&contract)?;
+        let code_hash = contract.source.hash;
 
         let blob = contract
             .source
@@ -441,6 +443,7 @@ impl Contract {
             project,
             blob,
             address: None,
+            code_hash,
         })
     }
 
