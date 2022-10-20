@@ -21,8 +21,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build Solidity files
         run: |
-          solang compile --target substrate /contracts/solidity/test/*.sol -o /contracts/
-          solang compile --target substrate /contracts/solidity/*.sol -o /contracts/
+          solang compile --target substrate ./contracts/solidity/test/*.sol -o ./contracts/
+          solang compile --target substrate ./contracts/solidity/*.sol -o ./contracts/
       - uses: actions/upload-artifact@v3
         with:
           name: solidity
