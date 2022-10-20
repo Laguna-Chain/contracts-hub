@@ -17,18 +17,12 @@ jobs:
       credentials:
         username: _json_key
         password: ${{ secrets.GOOGLE_CREDENTIALS }}
-      volumes:
-        - /contracts:/mounted
     steps:
       - uses: actions/checkout@v3
-      - name: Login to GAR
-        uses: docker/login-action@v2
-        with:
-          registry: us-docker.pkg.dev
       - name: Build Solidity files
         run: |
-          solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/
-          solang compile --target substrate /mounted/solidity/*.sol -o /mounted/
+          solang compile --target substrate /contracts/solidity/test/*.sol -o /contracts/
+          solang compile --target substrate /contracts/solidity/*.sol -o /contracts/
       - uses: actions/upload-artifact@v3
         with:
           name: solidity
@@ -37,8 +31,6 @@ jobs:
     runs-on: ubuntu-22.04
     container:
       image: paritytech/contracts-ci-linux:production
-      volumes:
-        - /:/sources
     steps:
       - uses: actions/checkout@v3
       - name: Build System contracts
@@ -46,7 +38,7 @@ jobs:
           for f in *; do
             if [ -d "$f" ]; then
               echo "building $f"
-              cargo +nightly contract build --release --manifest-path=/sources/./$f/Cargo.toml
+              cargo +nightly contract build --release --manifest-path=./$f/Cargo.toml
               cp ./$f/target/ink/$f.contract ../
             fi
           done
