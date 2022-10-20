@@ -33,7 +33,7 @@ jobs:
     container:
       image: paritytech/contracts-ci-linux:production
       volumes:
-        - $(pwd):/sources
+        - ./:/sources
     steps:
       - uses: actions/checkout@v3
       - name: Build System contracts
