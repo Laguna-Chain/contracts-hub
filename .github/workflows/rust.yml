@@ -12,18 +12,23 @@ env:
 jobs:
   build-solidity:
     runs-on: ubuntu-22.04
+    container:
+      image: us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata
+      credentials:
+        username: _json_key
+        password: ${{ secrets.GOOGLE_CREDENTIALS }}
+      volumes:
+        - /contracts:/mounted
     steps:
       - uses: actions/checkout@v3
       - name: Login to GAR
         uses: docker/login-action@v2
         with:
           registry: us-docker.pkg.dev
-          username: _json_key
-          password: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: Build Solidity files
         run: |
-          docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
-          docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
+          solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/
+          solang compile --target substrate /mounted/solidity/*.sol -o /mounted/
       - uses: actions/upload-artifact@v3
         with:
           name: solidity
@@ -33,7 +38,7 @@ jobs:
     container:
       image: paritytech/contracts-ci-linux:production
       volumes:
-        - ./:/sources
+        - /:/sources
     steps:
       - uses: actions/checkout@v3
       - name: Build System contracts
