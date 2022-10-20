@@ -3,12 +3,12 @@
 use ink_lang as ink;
 
 #[ink::contract]
-mod special_env_fn {
+mod env_utils {
 
     #[ink(storage)]
-    pub struct SpecialEnvFn {}
+    pub struct EnvUtils {}
 
-    impl SpecialEnvFn {
+    impl EnvUtils {
         #[ink(constructor, selector = 0x861731d5)]
         pub fn new() -> Self {
             Self {}

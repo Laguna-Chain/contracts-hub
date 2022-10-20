@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
-import "../system-contracts/special_env_fn/interface.sol";
+import "../system-contracts/env_utils/interface.sol";
 
-contract SpecialEnvFn{
-    special_env_fn sys_contract;
+contract TestEnvUtils {
+    EnvUtils sys_contract;
 
     constructor(address sys_contract_addr) {
-        sys_contract = special_env_fn(sys_contract_addr);
+        sys_contract = EnvUtils(sys_contract_addr);
     }
 
     function is_contract(address account) external view returns(bool) {

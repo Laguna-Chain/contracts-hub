@@ -4,7 +4,7 @@ use parity_scale_codec::Decode;
 use sp_core::hexdisplay::AsBytesRef;
 
 #[tokio::test]
-async fn access_special_env_from_solidity() -> anyhow::Result<()> {
+async fn access_env_utils_from_solidity() -> anyhow::Result<()> {
     const ALICE: sp_keyring::AccountKeyring = sp_keyring::AccountKeyring::Alice;
 
     let api = crate::API::from_url(
@@ -12,8 +12,8 @@ async fn access_special_env_from_solidity() -> anyhow::Result<()> {
     )
     .await?;
 
-    // 1A. Deploy the system-contract (special_env_fn)
-    let mut system_contract = Contract::new("../contracts/special_env_fn.contract")?;
+    // 1A. Deploy the system-contract (env_utils)
+    let mut system_contract = Contract::new("../contracts/env_utils.contract")?;
     system_contract
         .deploy_as_system_contract(&api, None, 0, &|t: ContractMessageTranscoder<'_>| {
             t.encode::<_, String>("new", []).unwrap()
@@ -23,7 +23,7 @@ async fn access_special_env_from_solidity() -> anyhow::Result<()> {
     let system_contract_addr = system_contract.address.unwrap();
 
     // 1B. Deploy the sample solidity contract
-    let mut contract = Contract::new("../contracts/SpecialEnvFn.contract")?;
+    let mut contract = Contract::new("../contracts/TestEnvUtils.contract")?;
     contract
         .deploy(&api, ALICE, 0, &|t: ContractMessageTranscoder<'_>| {
             t.encode::<_, String>("new", [format!("0x{}", hex::encode(&system_contract_addr))])

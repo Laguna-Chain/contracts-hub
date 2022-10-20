@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-interface special_env_fn {
+interface EnvUtils {
     /// Checks whether the specified account is a contract.
     function is_contract(address account) external view returns(bool);
 
