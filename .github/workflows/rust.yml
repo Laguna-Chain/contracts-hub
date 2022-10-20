@@ -47,6 +47,7 @@ jobs:
       run: |
         docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/test/*.sol -o /mounted/"
         docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/solidity/*.sol -o /mounted/"
+        docker run --rm -v $(pwd)/contracts:/mounted  --entrypoint /bin/bash us-docker.pkg.dev/laguna-chain/laguna-chain/solang:ink_metadata -c "solang compile --target substrate /mounted/example-system-contracts/*.sol -o /mounted/"
     - name: start laguna-chain:devnet
       run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.1 --dev --ws-external
     - name: Run tests
