@@ -11,7 +11,7 @@ use sp_core::{crypto::AccountId32, hexdisplay::AsBytesRef};
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 

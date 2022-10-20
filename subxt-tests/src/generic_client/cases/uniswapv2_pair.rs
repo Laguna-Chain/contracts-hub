@@ -18,7 +18,7 @@ use crate::generic_client::{
 #[tokio::test]
 async fn mint() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -223,7 +223,7 @@ async fn mint() -> anyhow::Result<()> {
 #[tokio::test]
 async fn swap_token0() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -441,7 +441,7 @@ async fn swap_token0() -> anyhow::Result<()> {
 #[tokio::test]
 async fn swap_token1() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -659,7 +659,7 @@ async fn swap_token1() -> anyhow::Result<()> {
 #[tokio::test]
 async fn burn() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 

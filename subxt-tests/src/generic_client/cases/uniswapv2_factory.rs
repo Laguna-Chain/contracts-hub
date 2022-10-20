@@ -16,7 +16,7 @@ use crate::generic_client::{
 #[tokio::test]
 async fn setup() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -72,7 +72,7 @@ async fn setup() -> anyhow::Result<()> {
 #[tokio::test]
 async fn test_pair() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -118,7 +118,7 @@ async fn test_pair() -> anyhow::Result<()> {
 #[tokio::test]
 async fn test_pair_reverse() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -164,7 +164,7 @@ async fn test_pair_reverse() -> anyhow::Result<()> {
 #[tokio::test]
 async fn set_fee_to() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
@@ -207,7 +207,7 @@ async fn set_fee_to() -> anyhow::Result<()> {
 #[tokio::test]
 async fn set_fee_to_setter() -> anyhow::Result<()> {
     let api = API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 
