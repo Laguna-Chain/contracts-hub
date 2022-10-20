@@ -26,7 +26,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: solidity
-          path: ./contracts/*.wasm ./contracts/*.contract
+          path: |
+            ./contracts/*.wasm 
+            ./contracts/*.contract
   build-ink:
     runs-on: ubuntu-22.04
     container:
@@ -46,7 +48,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ink
-          path: ./contracts/*.wasm ./contracts/*.contract
+          path: |
+            ./contracts/*.wasm 
+            ./contracts/*.contract
   integration-tests-generic-clients:
     runs-on: ubuntu-22.04
     needs:
