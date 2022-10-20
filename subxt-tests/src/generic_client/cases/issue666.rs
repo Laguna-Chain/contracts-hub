@@ -1,11 +1,14 @@
 use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::Encode;
 
-use crate::{load_project, DeployContract, Execution, WriteContract, API};
+use crate::generic_client::{load_project, DeployContract, Execution, WriteContract, API};
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let flipper_code = std::fs::read("../contracts/Flip.wasm")?;
     let inc_code = std::fs::read("../contracts/Inc.wasm")?;

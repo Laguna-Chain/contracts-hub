@@ -6,11 +6,16 @@ use rand::Rng;
 use sp_core::{crypto::AccountId32, hexdisplay::AsBytesRef, keccak_256, U256};
 use subxt::ext::bitvec::macros::internal::funty::Numeric;
 
-use crate::{load_project, DeployContract, Execution, ReadContract, WriteContract, API};
+use crate::generic_client::{
+    load_project, DeployContract, Execution, ReadContract, WriteContract, API,
+};
 
 #[tokio::test]
 async fn setup() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let w = MockWorld::init(&api).await?;
 
@@ -150,7 +155,10 @@ struct MockWorld {
 
 #[tokio::test]
 async fn approve() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let w = MockWorld::init(&api).await?;
 
@@ -194,7 +202,10 @@ async fn approve() -> anyhow::Result<()> {
 
 #[tokio::test]
 async fn transfer() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let w = MockWorld::init(&api).await?;
 
@@ -255,7 +266,10 @@ async fn transfer() -> anyhow::Result<()> {
 
 #[tokio::test]
 async fn transfer_from() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let w = MockWorld::init(&api).await?;
 
@@ -354,7 +368,10 @@ async fn transfer_from() -> anyhow::Result<()> {
 
 #[tokio::test]
 async fn transfer_from_max() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let w = MockWorld::init(&api).await?;
 

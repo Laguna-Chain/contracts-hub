@@ -1,4 +1,4 @@
-use crate::Contract;
+use crate::generic_client::Contract;
 use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::Decode;
 use sp_core::hexdisplay::AsBytesRef;

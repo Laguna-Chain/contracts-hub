@@ -1,11 +1,12 @@
-use crate::{
-    free_balance_of,
+use crate::generic_client::{
     node::{
         self,
         runtime_types::primitives::currency::{CurrencyId, TokenId},
     },
     Contract,
 };
+use crate::utils::free_balance_of;
+
 use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::{hexdisplay::AsBytesRef, U256};

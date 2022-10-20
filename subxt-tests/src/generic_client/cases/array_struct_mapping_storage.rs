@@ -2,14 +2,16 @@ use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::{hexdisplay::AsBytesRef, U256};
 
-use crate::{load_project, Contract, DeployContract, Execution, ReadContract, WriteContract, API};
+use crate::generic_client::{
+    load_project, Contract, DeployContract, Execution, ReadContract, WriteContract, API,
+};
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    
-
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
-
+    let api = API::from_url(
+        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let mut contract = Contract::new("../contracts/array_struct_mapping_storage.contract")?;
 
