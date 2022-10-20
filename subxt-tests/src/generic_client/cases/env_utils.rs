@@ -1,4 +1,4 @@
-use crate::Contract;
+use crate::generic_client::Contract;
 use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::Decode;
 use sp_core::hexdisplay::AsBytesRef;
@@ -8,7 +8,7 @@ async fn access_env_utils_from_solidity() -> anyhow::Result<()> {
     const ALICE: sp_keyring::AccountKeyring = sp_keyring::AccountKeyring::Alice;
 
     let api = crate::API::from_url(
-        std::env::var("END_POINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
     )
     .await?;
 

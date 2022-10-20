@@ -2,12 +2,15 @@ use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::{Compact, Decode, Input};
 use sp_core::{crypto::AccountId32, hexdisplay::AsBytesRef};
 
-use crate::{load_project, DeployContract, Execution, WriteContract, API};
+use crate::generic_client::{load_project, DeployContract, Execution, WriteContract, API};
 use hex::FromHex;
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
     let code = std::fs::read("../contracts/events.wasm")?;
 
     let p = load_project("../contracts/events.contract")?;

@@ -1,12 +1,12 @@
-mod arrays;
-
 mod array_struct_mapping_storage;
+mod arrays;
 mod asserts;
 mod balances;
 mod builtins;
 mod builtins2;
 mod create_contract;
 mod destruct;
+mod env_utils;
 mod events;
 mod external_call;
 mod flipper;
@@ -15,7 +15,6 @@ mod msg_sender;
 mod native_token_wrapper;
 mod primitives;
 mod randomizer;
-mod env_utils;
 mod store;
 mod structs;
 mod uniswapv2_erc20;

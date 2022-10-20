@@ -1,4 +1,6 @@
-use crate::{load_project, Contract, DeployContract, Execution, ReadContract, WriteContract, API};
+use crate::generic_client::{
+    load_project, Contract, DeployContract, Execution, ReadContract, WriteContract, API,
+};
 use contract_transcode::{ContractMessageTranscoder, Value};
 use hex::FromHex;
 use ink_metadata::Selector;
@@ -8,7 +10,10 @@ use sp_core::{crypto::AccountId32, hexdisplay::AsBytesRef};
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let mut contract = Contract::new("../contracts/arrays.contract")?;
 

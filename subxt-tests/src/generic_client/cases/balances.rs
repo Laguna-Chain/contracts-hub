@@ -1,20 +1,24 @@
 use std::time::Duration;
 
-use crate::{
-    free_balance_of, load_project,
+use crate::generic_client::{
+    load_project,
     node::{self, runtime_types::sp_runtime::multiaddress::MultiAddress},
     Contract, WriteContract,
 };
+use crate::utils::free_balance_of;
 use contract_transcode::ContractMessageTranscoder;
 use hex::FromHex;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::{hexdisplay::AsBytesRef, keccak_256, KeccakHasher, H256};
 
-use crate::{DeployContract, Execution, ReadContract, API};
+use crate::generic_client::{DeployContract, Execution, ReadContract, API};
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
 
     let mut contract = Contract::new("../contracts/balances.contract")?;
 

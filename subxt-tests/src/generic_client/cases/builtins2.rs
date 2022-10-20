@@ -2,11 +2,16 @@ use contract_transcode::ContractMessageTranscoder;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::hexdisplay::AsBytesRef;
 
-use crate::{load_project, node, DeployContract, Execution, ReadContract, API, GAS_LIMIT};
+use crate::generic_client::{
+    load_project, node, DeployContract, Execution, ReadContract, API, GAS_LIMIT,
+};
 
 #[tokio::test]
 async fn case() -> anyhow::Result<()> {
-    let api = API::from_url(std::env::var("END_POINT").unwrap_or_else(|_|"ws://127.0.0.1:9944".to_string())).await?;
+    let api = API::from_url(
+        std::env::var("ENDPOINT").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string()),
+    )
+    .await?;
     let code = std::fs::read("../contracts/builtins2.wasm")?;
 
     let p = load_project("../contracts/builtins2.contract")?;
