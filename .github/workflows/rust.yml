@@ -59,8 +59,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install jq -y
       - name: build runner
-        run: cp "$(cargo test --no-run --message-format=json | jq -r "select(.profile.test == true) | .filenames[]")" ./test-binary
-        working-directory: ../subxt-tests
+        run: cp "$(cargo test --manifest-path=./subxt-tests/Cargo.toml --no-run --message-format=json | jq -r "select(.profile.test == true) | .filenames[]")" subxt-tests/test-binary
       - uses: actions/upload-artifact@v3
         with:
           name: test-runner
