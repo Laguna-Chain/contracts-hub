@@ -51,21 +51,6 @@ jobs:
           path: |
             ./contracts/*.wasm 
             ./contracts/*.contract
-  # build-test-runner:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: get jq
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install jq -y
-  #     - name: build runner
-  #       run: echo "TEST_PATH=$(cargo test --no-run --message-format=json | jq -r 'select(.profile.test == true) | .filenames[]')" >> $GITHUB_ENV
-  #       working-directory: subxt-tests
-  #     - run: cp ${{ env.TEST_PATH }} ./test-binary
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         name: test-runner
-  #         path: ./subxt-tests/test-binary
   integration-tests-generic-clients:
     runs-on: ubuntu-22.04
     needs:
@@ -88,12 +73,8 @@ jobs:
         with:
           name: ink
           path: ./contracts/
-      # - uses: actions/download-artifact@v3
-      #   with:
-      #     name: test-runner
-      #     path: ./subxt-tests/test-binary
       - name: start laguna-chain:devnet
-        run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.2_evm_compat --dev --ws-external
+        run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.4 --dev --ws-external
       - name: Run tests
         run: cargo test generic_client -- --test-threads=1
         working-directory: subxt-tests
@@ -102,7 +83,6 @@ jobs:
     needs:
       - build-solidity
       - build-ink
-      # - build-test-runner
     steps:
       - uses: actions/checkout@v3
       - name: Login to GAR
@@ -119,12 +99,8 @@ jobs:
         with:
           name: ink
           path: ./contracts/
-      # - uses: actions/download-artifact@v3
-      #   with:
-      #     name: test-runner
-      #     path: ./subxt-tests/test-binary
       - name: start laguna-chain:devnet
-        run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.2_evm_compat --dev --ws-external
+        run: docker run -d -p 9944:9944 us-docker.pkg.dev/laguna-chain/laguna-chain/laguna-chain:0.1.4 --dev --ws-external
       - name: Run tests
         run: cargo test eth_client -- --test-threads=1
         working-directory: subxt-tests

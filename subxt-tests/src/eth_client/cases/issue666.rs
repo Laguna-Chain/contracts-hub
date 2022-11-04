@@ -48,16 +48,16 @@ async fn case() -> anyhow::Result<()> {
             .await?;
     }
 
+    let nonce = eth_client_wrapper
+        .get_transaction_counts(eth_alice, None)
+        .await?;
+
     let mut create_payload = TxWrapper::<LegacyTransactionMessage>::create(
         0_u32.into(),
         code.into(),
         selector.into(),
-        Bytes::from(vec![]),
+        Bytes::from(vec![nonce.as_u128() as u8]),
     );
-
-    let nonce = eth_client_wrapper
-        .get_transaction_counts(eth_alice, None)
-        .await?;
 
     create_payload.chain_id.replace(1000);
     create_payload.nonce = nonce;
@@ -70,6 +70,8 @@ async fn case() -> anyhow::Result<()> {
             .to_vec();
 
     let tx_id = eth_client_wrapper.send_raw_transaction(raw.into()).await?;
+
+    dbg!(tx_id);
 
     Ok(())
 }
